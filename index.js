@@ -1,19 +1,20 @@
 
 const storageName = "checklistItems";
-const initialChecklistItems = [
-    { text: "item1", isDone: false },
-    { text: "item2", isDone: false },
-    { text: "item3", isDone: false },
-    { text: "item4", isDone: false },
-    { text: "item5", isDone: false },
-    { text: "item6", isDone: false },
-];
+let initialChecklistItems = [];
 let checklistItems = [];
 
+loadInitialChecklistItems();
 loadFromStorage();
 setCheckboxesChecked();
 setCheckboxesTextDecorations();
 addEventListenersToCheckBoxes();
+
+function loadInitialChecklistItems() {
+    let checkboxLabels = document.querySelectorAll('label');
+    for (let i = 0; i < checkboxLabels.length; i++) {
+        initialChecklistItems.push({ text: checkboxLabels[i].textContent, isDone: false });
+    }
+}
 
 function addEventListenersToCheckBoxes() {
     let checkBoxes = document.querySelectorAll('input[type=checkbox]');
@@ -88,6 +89,9 @@ function loadFromStorage() {
         checklistItems = initialChecklistItems;
     else
         checklistItems = JSON.parse(checklistItemsFromStorage);
+
+    if (checklistItems.length !== initialChecklistItems.length)
+        checklistItems = initialChecklistItems;
 }
 
 function saveToStorage() {
